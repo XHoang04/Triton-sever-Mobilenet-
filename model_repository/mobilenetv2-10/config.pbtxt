@@ -1,0 +1,28 @@
+name: "mobilenetv2-10"
+platform: "onnxruntime_onnx"
+backend: "onnxruntime"
+max_batch_size: 8             
+input [
+  {
+    name: "input"             
+    data_type: TYPE_FP32      
+    dims: [ 3, 224, 224 ]    
+  }
+]
+output [
+  {
+    name: "output"            
+    data_type: TYPE_FP32     
+    dims: [ 1000 ]            
+  }
+]
+instance_group [
+  {
+    kind: KIND_GPU           
+    count: 1                  
+  }
+]
+version_policy: {
+    all {
+    }
+}

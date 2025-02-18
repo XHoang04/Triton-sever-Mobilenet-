@@ -1,0 +1,32 @@
+name: "mobilenetv2-10"
+platform: "onnxruntime_onnx"
+backend: "onnxruntime"
+max_batch_size: 32               # Tăng kích thước batch để thử nghiệm với throughput cao hơn
+input [
+  {
+    name: "input"
+    data_type: TYPE_FP32
+    dims: [ 3, 224, 224 ]
+  }
+]
+output [
+  {
+    name: "output"
+    data_type: TYPE_FP32
+    dims: [ 1000 ]
+  }
+]
+instance_group [
+  {
+    kind: KIND_GPU
+    count: 1                    # Giữ 1 GPU, nhưng có thể thử với số lượng GPU khác nếu có sẵn
+  }
+]
+dynamic_batching {
+  preferred_batch_size: [ 8, 16, 32 ]   # Thử nghiệm với batch size động để tối ưu throughput
+  max_queue_delay: 100                  # Tối ưu hóa độ trễ chờ để tăng tốc độ
+}
+version_policy: {
+    all {
+    }
+}

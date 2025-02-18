@@ -1,0 +1,46 @@
+name: "mobilenetv2-10"
+platform: "onnxruntime_onnx"
+backend: "onnxruntime"
+
+max_batch_size: 16  
+
+input [
+  {
+    name: "input"
+    data_type: TYPE_FP32
+    dims: [ 3, 224, 224 ]
+  }
+]
+
+output [
+  {
+    name: "output"
+    data_type: TYPE_FP32
+    dims: [ 1000 ]
+  }
+]
+
+instance_group [
+  {
+    kind: KIND_GPU
+    count: 2    }
+]
+
+optimization {
+  input_pinned_memory {
+    enable: true  
+  }
+  output_pinned_memory {
+    enable: true
+  }
+}
+
+dynamic_batching { 
+  preferred_batch_size: [4, 8, 16]   
+  max_queue_delay_microseconds: 5000
+}
+
+version_policy: {
+    all {
+    }
+}
